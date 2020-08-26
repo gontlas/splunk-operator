@@ -36,9 +36,6 @@ const (
 	serviceTemplateStr = "splunk-%s-%s-%s"
 
 	// identifier
-	secretsTemplateStr = "splunk-%s-%s-secrets"
-
-	// identifier
 	defaultsTemplateStr = "splunk-%s-%s-defaults"
 
 	// default docker image used for Splunk instances
@@ -51,7 +48,22 @@ const (
 	secretBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 	// namespace scoped secret name
-	commonSecretName = "splunk-secrets"
+	namespaceScopedSecretName = "splunk-%s-secret"
+
+	// firstVersion secret
+	firstVersion = "1"
+
+	// Less than zero version error
+	lessThanOrEqualToZeroVersionError = "Versions shouldn't be <= 0"
+
+	// Non-integer version error
+	nonIntegerVersionError = "Failed to convert non integer string to integer value"
+
+	// Non-matching string error
+	nonMatchingStringError = "Non-matching string secretName %s versionedSecretIdentifier %s"
+
+	// Missing Token error
+	missingTokenError = "Couldn't convert to splunk readable format, %s token missing"
 )
 
 // GetSplunkDeploymentName uses a template to name a Kubernetes Deployment for Splunk instances.
@@ -80,11 +92,6 @@ func GetSplunkServiceName(instanceType InstanceType, identifier string, isHeadle
 	}
 
 	return result
-}
-
-// GetSplunkSecretsName uses a template to name a Kubernetes Secret for a SplunkEnterprise resource.
-func GetSplunkSecretsName(identifier string, instanceType InstanceType) string {
-	return fmt.Sprintf(secretsTemplateStr, identifier, instanceType.ToKind())
 }
 
 // GetSplunkDefaultsName uses a template to name a Kubernetes ConfigMap for a SplunkEnterprise resource.
